@@ -1,0 +1,33 @@
+name: Deploy NGINX to Minikube with Helm
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.29.0'
+
+      - name: Set up Minikube
+        uses: medyagh/setup-minikube@v0.4.0
+
+      - name: Start Minikube
+        run: minikube start --driver=docker
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install nginx charts/nginx
+          kubectl rollout status deployment/nginx-service
