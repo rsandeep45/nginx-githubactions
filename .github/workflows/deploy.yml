@@ -13,12 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Start Minikube
-        shell: cmd
-        run: |
-          minikube start
-          minikube status
-
       - name: Deploy NGINX with Helm
         shell: cmd
         run: |
