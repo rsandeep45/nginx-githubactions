@@ -22,6 +22,7 @@ jobs:
         shell: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
         run: kubectl get all
 
+
       - name: Test NGINX service
         shell: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
         run: |
