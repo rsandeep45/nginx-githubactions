@@ -14,24 +14,24 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Start Minikube
-        shell: powershell
+        shell: cmd
         run: |
           minikube start
           minikube status
 
       - name: Deploy NGINX with Helm
-        shell: powershell
+        shell: cmd
         run: |
           helm upgrade --install nginx charts/nginx
           kubectl rollout status deployment/nginx-service --timeout=90s
 
       - name: Get all Kubernetes resources
-        shell: powershell
+        shell: cmd
         run: kubectl get all
 
       - name: Test NGINX service
-        shell: powershell
+        shell: cmd
         run: |
-          $url = minikube service nginx-service --url
-          Write-Host "Nginx service URL: $url"
-          Invoke-WebRequest -Uri $url
+          for /f "tokens=*" %%i in ('minikube service nginx-service --url') do set URL=%%i
+          echo Nginx service URL: %URL%
+          curl %URL%
