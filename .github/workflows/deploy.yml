@@ -3,7 +3,7 @@ name: Deploy NGINX to Minikube with Helm
 on:
   push:
     branches:
-      - master
+      - master  # or main if that's your default branch
 
 jobs:
   deploy:
@@ -13,13 +13,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Start Docker
+        shell: powershell
+        run: |
+          Start-Service docker
+          docker version
+
       - name: Start Minikube
         shell: powershell
         run: |
           minikube start --driver=docker
+          minikube status
 
-      - name: Deploy with Helm
+      - name: Deploy NGINX using Helm
         shell: powershell
         run: |
           helm upgrade --install nginx charts/nginx
-          kubectl rollout status deployment/nginx-service
+          kubectl rollout status deployment/nginx-service --timeout=90s
+
+      - name: Verify deployment
+        shell: powershell
+        run: |
+          kubectl get all
