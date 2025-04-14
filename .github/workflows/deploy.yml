@@ -1,30 +1,29 @@
-name: Deploy NGINX to Minikube with Helm
-
-on:
-  push:
-    branches:
-      - master
-
 jobs:
   deploy:
     runs-on: [self-hosted, Windows, X64]
-    defaults:
-      run:
-        shell: pwsh  # 👈 Use 'pwsh' instead of 'powershell'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Start Minikube
+        shell: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+        run: |
+          minikube start
+          minikube status
+
       - name: Deploy NGINX with Helm
+        shell: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
         run: |
           helm upgrade --install nginx charts/nginx
           kubectl rollout status deployment/nginx-service --timeout=90s
 
       - name: Get all Kubernetes resources
+        shell: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
         run: kubectl get all
 
       - name: Test NGINX service
+        shell: 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
         run: |
           $url = minikube service nginx-service --url
           Write-Host "Nginx service URL: $url"
