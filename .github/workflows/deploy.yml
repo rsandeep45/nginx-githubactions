@@ -3,14 +3,14 @@ name: Deploy NGINX to Minikube with Helm
 on:
   push:
     branches:
-      - master  # or main, if that's your default branch
+      - master
 
 jobs:
   deploy:
     runs-on: [self-hosted, Windows, X64]
     defaults:
       run:
-        shell: powershell
+        shell: pwsh  # 👈 Use 'pwsh' instead of 'powershell'
 
     steps:
       - name: Checkout code
