@@ -14,16 +14,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Start Minikube
+        shell: powershell
         run: |
           minikube start --driver=docker
 
-      - name: Install Helm (if not installed)
-        run: |
-          if (-not (Get-Command helm -ErrorAction SilentlyContinue)) {
-            choco install kubernetes-helm -y
-          }
-
       - name: Deploy with Helm
+        shell: powershell
         run: |
           helm upgrade --install nginx charts/nginx
           kubectl rollout status deployment/nginx-service
