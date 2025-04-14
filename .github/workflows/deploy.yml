@@ -3,7 +3,7 @@ name: Deploy NGINX to Minikube with Helm
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
