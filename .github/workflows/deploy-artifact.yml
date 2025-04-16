@@ -1,0 +1,46 @@
+name: Build and Deploy NGINX
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build Artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create build output (simulate)
+        run: |
+          mkdir -p build
+          echo "<h1>Deployed via GitHub Actions 🚀</h1>" > build/index.html
+          zip -r nginx-artifact.zip build/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nginx-artifact
+          path: nginx-artifact.zip
+
+  deploy:
+    name: Deploy Artifact
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nginx-artifact
+
+      - name: Unzip and view contents
+        run: |
+          unzip nginx-artifact.zip
+          cat build/index.html
