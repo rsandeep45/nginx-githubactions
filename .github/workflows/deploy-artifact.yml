@@ -1,4 +1,4 @@
-name: Build and Deploy NGINX
+name: Build and Deploy Artifact
 
 on:
   push:
@@ -11,17 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Create build output (simulate)
+      - name: Create Artifact Content
         run: |
           mkdir -p build
           echo "<h1>Deployed via GitHub Actions 🚀</h1>" > build/index.html
           zip -r nginx-artifact.zip build/
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: nginx-artifact
           path: nginx-artifact.zip
@@ -32,15 +32,15 @@ jobs:
     needs: build
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v3.1.2
         with:
           name: nginx-artifact
 
-      - name: Unzip and view contents
+      - name: Unzip and View Contents
         run: |
           unzip nginx-artifact.zip
           cat build/index.html
